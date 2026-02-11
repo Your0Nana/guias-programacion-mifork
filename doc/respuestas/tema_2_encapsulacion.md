@@ -248,33 +248,85 @@ public class Punto {
 ### En términos de encapsulación, los enumerados son excelentes porque limitan los valores posibles a un conjunto predefinido, evitando que se pasen valores inválidos. Además, al ser clases, permiten encapsular lógica relacionada directamente con esas constantes dentro de la propia definición del enumerado.
 
 
-## 23. Crea un tipo enumerado en Java que se llame `Mes`, con doce posibles instancias y que además proporcione métodos para obtener cuántos días tiene ese mes, el ordinal de ese mes en el año (1-12), empleando atributos privados y constructores del tipo enumerado. Añade además cuatro métodos para devolver si ese mes tiene algunos días de invierno, primavera, verano u otoño, indicando con un booleano el hemisferio (norte o sur, parámetro `enHemisferioNorte`). Es decir: `esDePrimavera(boolean esHemisferioNorte)`, `esDeVerano(boolean esHemisferioNorte)`, `esDeOtoño(boolean esHemisferioNorte)`, `esDeInvierno(boolean esHemisferioNorte)`
+## 23. Crea un tipo enumerado en Java que se llame `Mes`, con doce posibles instancias y que además proporcione métodos para obtener cuántos días tiene ese mes, el ordinal de ese mes en el año (1-12), empleando atributos privados y constructores del tipo enumerado.
 
 ```Java
 public enum Mes {
-    ENERO(31, 1), FEBRERO(28, 2), MARZO(31, 3), ABRIL(30, 4),
-    MAYO(31, 5), JUNIO(30, 6), JULIO(31, 7), AGOSTO(31, 8),
-    SEPTIEMBRE(30, 9), OCTUBRE(31, 10), NOVIEMBRE(30, 11), DICIEMBRE(31, 12);
+    // Instancias del enumerado con sus valores para el constructor
+    ENERO(1, 31), FEBRERO(2, 28), MARZO(3, 31), ABRIL(4, 30),
+    MAYO(5, 31), JUNIO(6, 30), JULIO(7, 31), AGOSTO(8, 31),
+    SEPTIEMBRE(9, 30), OCTUBRE(10, 31), NOVIEMBRE(11, 30), DICIEMBRE(12, 31);
 
-    private final int dias;
+    // Atributos privados
     private final int ordinal;
+    private final int numDias;
 
-    // El constructor de un Enum es siempre privado por defecto
-    Mes(int dias, int ordinal) {
-        this.dias = dias;
+    // Constructor del enumerado (siempre es privado por defecto)
+    Mes(int ordinal, int numDias) {
         this.ordinal = ordinal;
+        this.numDias = numDias;
     }
 
-    public int getDias() { return dias; }
+    // Método para obtener el número de días
+    public int getNumDias() {
+        return this.numDias;
+    }
+
+    // Método para obtener el ordinal (1-12)
+    public int getOrdinal() {
+        return this.ordinal;
+    }
+}
+```
+
+
+## 24. Añade a la clase `Mes` del ejercicio anterior cuatro métodos para devolver si ese mes tiene algunos días de invierno, primavera, verano u otoño, indicando con un booleano el hemisferio (norte o sur, parámetro `enHemisferioNorte`). Es decir: `esDePrimavera(boolean esHemisferioNorte)`, `esDeVerano(boolean esHemisferioNorte)`, `esDeOtoño(boolean esHemisferioNorte)`, `esDeInvierno(boolean esHemisferioNorte)`
+
+```Java
+public enum Mes {
+    ENERO(1, 31), FEBRERO(2, 28), MARZO(3, 31), ABRIL(4, 30),
+    MAYO(5, 31), JUNIO(6, 30), JULIO(7, 31), AGOSTO(8, 31),
+    SEPTIEMBRE(9, 30), OCTUBRE(10, 31), NOVIEMBRE(11, 30), DICIEMBRE(12, 31);
+
+    private final int ordinal;
+    private final int numDias;
+
+    Mes(int ordinal, int numDias) {
+        this.ordinal = ordinal;
+        this.numDias = numDias;
+    }
+
+    public int getNumDias() { return numDias; }
     public int getOrdinal() { return ordinal; }
+
+    // --- Métodos de estaciones ---
+
+    public boolean esDeInvierno(boolean enHemisferioNorte) {
+        if (enHemisferioNorte) {
+            return this == DICIEMBRE || this == ENERO || this == FEBRERO;
+        }
+        return this == JUNIO || this == JULIO || this == AGOSTO;
+    }
+
+    public boolean esDePrimavera(boolean enHemisferioNorte) {
+        if (enHemisferioNorte) {
+            return this == MARZO || this == ABRIL || this == MAYO;
+        }
+        return this == SEPTIEMBRE || this == OCTUBRE || this == NOVIEMBRE;
+    }
 
     public boolean esDeVerano(boolean enHemisferioNorte) {
         if (enHemisferioNorte) {
             return this == JUNIO || this == JULIO || this == AGOSTO;
-        } else {
-            return this == DICIEMBRE || this == ENERO || this == FEBRERO;
         }
+        return this == DICIEMBRE || this == ENERO || this == FEBRERO;
     }
-    // (Resto de métodos esDeInvierno, etc., seguirían una lógica similar)
+
+    public boolean esDeOtono(boolean enHemisferioNorte) {
+        if (enHemisferioNorte) {
+            return this == SEPTIEMBRE || this == OCTUBRE || this == NOVIEMBRE;
+        }
+        return this == MARZO || this == ABRIL || this == MAYO;
+    }
 }
 ```
